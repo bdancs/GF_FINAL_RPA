@@ -10,7 +10,7 @@ Turma: 4ESPX
 
 ## Vídeo[]
 
-## Aplicativo[https://apps.powerapps.com/play/e/default-11dbbfe2-89b8-4549-be10-cec364e59551/a/272119c6-6fbc-4678-ad9e-1ba678eee01e?tenantId=11dbbfe2-89b8-4549-be10-cec364e59551&hint=bf982d95-4e42-4bc7-93f0-55d0d97c4613&sourcetime=1795054198228]
+## [Aplicativo](https://apps.powerapps.com/play/e/default-11dbbfe2-89b8-4549-be10-cec364e59551/a/272119c6-6fbc-4678-ad9e-1ba678eee01e?tenantId=11dbbfe2-89b8-4549-be10-cec364e59551&hint=bf982d95-4e42-4bc7-93f0-55d0d97c4613&sourcetime=1795054198228)
 
 ## Sobre
 O AlertaBairro é uma solução criada para permitir que moradores registrem e consultem ocorrências de alagamento em suas regiões.
@@ -43,19 +43,7 @@ Centralizar informações sobre ocorrências de alagamento, permitindo que morad
 
 ## Arquitetura
 
-Power Apps
-↓
-Power Automate - AnaliseRegistros
-↓
-Consulta registros existentes
-↓
-Verificação de endereço + intervalo de 30 minutos
-↓
-Aprovado ou Recusado
-↓
-SharePoint
-↓
-Power BI
+Power Apps > Power Automate - AnaliseRegistros > Consulta registros existentes > Verificação de endereço + intervalo de 30 minutos > Aprovado ou Recusado > SharePoint > Power BI
 
 ### Processo da automação
 1. O usuário registra uma ocorrência pelo Power Apps.
