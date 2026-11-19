@@ -8,9 +8,9 @@
 
 Turma: 4ESPX
 
-## Vídeo[]
-
-## [Aplicativo](https://apps.powerapps.com/play/e/default-11dbbfe2-89b8-4549-be10-cec364e59551/a/272119c6-6fbc-4678-ad9e-1ba678eee01e?tenantId=11dbbfe2-89b8-4549-be10-cec364e59551&hint=bf982d95-4e42-4bc7-93f0-55d0d97c4613&sourcetime=1795054198228)
+## Links
+- Vídeo[]
+- [Aplicativo](https://apps.powerapps.com/play/e/default-11dbbfe2-89b8-4549-be10-cec364e59551/a/272119c6-6fbc-4678-ad9e-1ba678eee01e?tenantId=11dbbfe2-89b8-4549-be10-cec364e59551&hint=bf982d95-4e42-4bc7-93f0-55d0d97c4613&sourcetime=1795054198228)
 
 ## Sobre
 O AlertaBairro é uma solução criada para permitir que moradores registrem e consultem ocorrências de alagamento em suas regiões.
@@ -18,9 +18,9 @@ O AlertaBairro é uma solução criada para permitir que moradores registrem e c
 A proposta busca reunir informações locais em um único ambiente, permitindo que relatos realizados pela própria comunidade ajudem outros moradores a conhecer áreas afetadas e acompanhar a frequência das ocorrências.
 
 ## Problema
-Em períodos de chuva intensa, moradores podem ter dificuldade para encontrar informações atualizadas sobre ocorrências de alagamento em suas regiões. Além disso, a falta de um canal estruturado para comunicação entre membros dessa região dificultam o repasse de informações.
+Em períodos de chuva intensa, moradores podem ter dificuldade para encontrar informações atualizadas sobre ocorrências de alagamento em suas regiões ou em locais para os quais precisam se deslocar. Essas informações podem estar distribuídas entre diferentes fontes.
 
-O AlertaBairro busca criar esse canal colaborativo, permitindo transformar relatos em informações organizadas que possam ser utilizadas pela comunidade.
+O AlertaBairro propõe complementar as fontes existentes por meio da participação da própria comunidade, permitindo transformar relatos individuais em informações organizadas e acessíveis a outros moradores.
 
 ## Público
 A solução é direcionada principalmente a:
@@ -35,9 +35,10 @@ Centralizar informações sobre ocorrências de alagamento, permitindo que morad
 - Registro de uma ocorrência de alagamento:
   - informar região e endereço;
   - indicar o nível da água;
+  - colocar uma descrição e caso queira uma foto
 - Consulta registros existentes;
 - Validação automática de novos registros;
-- Classificação de registros como "Aprovado" ou "Reprovado";
+- Classificação de registros como "Aprovado" ou "Recusado";
 - Armazenamento dos dados no SharePoint;
 - Análise da frequência de ocorrências por região e ao longo do tempo.
 
@@ -71,11 +72,12 @@ Responsável pelo armazenamento estruturado das ocorrências processadas.
 Responsável pela visualização e análise da frequência das ocorrências por região e período.
 
 ### Objetivo
-Como os registros são realizados de forma colaborativa, diferentes moradores podem registrar a mesma ocorrência em um pequeno intervalo de tempo. então ela funciona como um mecanismo de apoio à plataforma para aumentar a qualidade e a confiabilidade dos registros utilizados pela solução.
+Como os registros são realizados de forma colaborativa, diferentes moradores podem registrar a mesma ocorrência em um curto intervalo de tempo. A automação AnaliseRegistros funciona como um mecanismo de apoio ao AlertaBairro, identificando possíveis duplicidades e contribuindo para aumentar a qualidade e a confiabilidade dos dados utilizados pela solução.
 
 ## Regra de negócio
 Um novo registro será considerado duplicado quando existir uma ocorrência:
 - no mesmo endereço
+- registro anterior com status Aprovado
 - registrada nos últimos 30 minutos
 
 Quando todas as condições forem atendidas: Status = Recusado
@@ -89,14 +91,22 @@ O intervalo de análise é calculado no Power Automate com: addMinutes(utcNow(),
 3. Essa estrutura permite processar uma coleção de registros automaticamente, sem intervenção manual.
 
 ## Variáveis
-- DuplicadoEncontrado : É alterado para true quando o fluxo identifica uma ocorrência aprovada para o mesmo endereço dentro dos últimos 30 minutos.
-- StatusRegistro : Quando uma possível duplicidade é encontrada, o valor é alterado para: Recusado
+
+### DuplicadoEncontrado :
+- Tipo: booleano
+- Valor inicial: false
+- É alterado para true quando o fluxo identifica uma ocorrência aprovada para o mesmo endereço dentro dos últimos 30 minutos.
+
+### StatusRegistro :
+- Tipo: string
+- Valor inicial: Aprovado
+- Quando uma possível duplicidade é encontrada, o valor é alterado para: Recusado
 
 ## Tratamento de exceções
 O fluxo possui tratamento específico para falhas durante o processamento.
 1. As principais atividades da automação são executadas dentro de um escopo de processamento.
 2. Caso esse processamento apresente falha ou ultrapasse o tempo esperado de execução, o escopo de tratamento de erro é acionado.
-3. A ocorrência da falha é registrada para auditoria, evitando travar o processo.
+3. A ocorrência da falha é registrada para auditoria, evitando que falhas ocorram silenciosamente e permitindo sua rastreabilidade.
 
 ## Logs e auditoria
 A automação mantém registros de execução contendo informações como:
@@ -123,7 +133,7 @@ O MVP busca minimizar a coleta de informações pessoais. Os principais dados ut
 - descrição
 - data e hora
 - status de validação
-- 
+
 A solução evita utilizar informações pessoais desnecessárias dos moradores, e logs e evidências publicados no repositório também não devem expor informações sensíveis.
 
 ## Tecnologias utilizadas
